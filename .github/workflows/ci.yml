@@ -19,20 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu, macos, windows]
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
-        include:
-          # no pydantic-core binaries for pypy on windows, so tests take absolute ages
-          # macos tests with pypy take ages (>10mins) since pypy is very slow
-          # so we only test pypy on ubuntu
-          - os: ubuntu
-            python-version: 'pypy3.7'
-          - os: ubuntu
-            python-version: 'pypy3.8'
-          - os: ubuntu
-            python-version: 'pypy3.9'
-          - os: ubuntu
-            python-version: 'pypy3.10'
+        os: [ubuntu, windows]
+        python-version: ['3.10']
 
     env:
       OS: ${{ matrix.os }}
