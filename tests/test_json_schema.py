@@ -3050,6 +3050,28 @@ def test_conflicting_names():
     }
 
 
+def test_schema_for_imported_file(create_module):
+    @create_module
+    def module():
+        from pydantic import BaseModel
+
+        class Foo(BaseModel):
+            x: int
+
+    foo_model = module.Foo
+    _, v_schema = models_json_schema([(foo_model, 'validation')])
+    assert v_schema == {
+        '$defs': {
+            'Foo': {
+                'properties': {'x': {'title': 'X', 'type': 'integer'}},
+                'required': ['x'],
+                'title': 'Foo',
+                'type': 'object',
+            }
+        }
+    }
+
+
 def test_schema_for_generic_field():
     T = TypeVar('T')
 
