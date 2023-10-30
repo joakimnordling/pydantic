@@ -3050,13 +3050,17 @@ def test_conflicting_names():
     }
 
 
-def test_schema_for_imported_file(create_module):
-    @create_module
-    def module():
-        from pydantic import BaseModel
+def test_module_with_colon_in_module_name(create_module):
+    module = create_module(
+        # language=Python
+        """
+from pydantic import BaseModel
 
-        class Foo(BaseModel):
-            x: int
+class Foo(BaseModel):
+    x: int
+        """,
+        module_name_prefix='C:\\',
+    )
 
     foo_model = module.Foo
     _, v_schema = models_json_schema([(foo_model, 'validation')])
